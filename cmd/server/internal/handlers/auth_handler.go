@@ -20,7 +20,15 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// Default role
+	// Hash password
+	hashedPassword, err := utils.HashPassword(user.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		return
+	}
+
+	user.Password = hashedPassword
+
 	if user.Role == "" {
 		user.Role = "user"
 	}
@@ -29,7 +37,6 @@ func Register(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "User registered",
-		"user":    user,
 	})
 }
 
@@ -44,7 +51,7 @@ func Login(c *gin.Context) {
 
 	for _, user := range users {
 		if user.Email == loginData.Email &&
-			user.Password == loginData.Password {
+			utils.CheckPassword(loginData.Password, user.Password) {
 
 			token, err := utils.GenerateToken(user.ID, user.Role)
 			if err != nil {

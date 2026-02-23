@@ -49,10 +49,13 @@ func SetupRoutes(r *gin.Engine) {
 			auth.GET("/orders", handlers.GetOrders)
 
 			// Admin only group
+
 			admin := auth.Group("/")
 			admin.Use(middleware.AdminOnly())
 			{
 				admin.POST("/products", handlers.CreateProduct)
+				admin.PUT("/products/:id", handlers.UpdateProduct)
+				admin.DELETE("/products/:id", handlers.DeleteProduct)
 			}
 		}
 	}
