@@ -1,8 +1,8 @@
 package models
 
 type Order struct {
-	ID       string   `json:"id"`
-	UserID   string   `json:"user_id"`
-	Products []string `json:"products"`
-	Status   string   `json:"status"`
+	ID       string         `json:"id"`
+	UserID   string         `json:"user_id"`
+	Products map[string]int `json:"products"` // productID -> quantity
+	Status   string         `json:"status"`
 }

@@ -28,18 +28,18 @@ func CreateOrder(c *gin.Context) {
 	order.UserID = userID.(string)
 	order.Status = "pending"
 
-	// Check product availability and reduce stock
-	for _, prodID := range order.Products {
+	// Check stock for each product
+	for prodID, qty := range order.Products {
 		found := false
 		for i, p := range products {
 			if p.ID == prodID {
 				found = true
-				if p.Stock <= 0 {
-					c.JSON(http.StatusBadRequest, gin.H{"error": "Product out of stock: " + p.Name})
+				if p.Stock < qty {
+					c.JSON(http.StatusBadRequest, gin.H{"error": "Insufficient stock for product: " + p.Name})
 					return
 				}
 				// Reduce stock
-				products[i].Stock -= 1
+				products[i].Stock -= qty
 			}
 		}
 		if !found {
