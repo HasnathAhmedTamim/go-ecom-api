@@ -1,19 +1,50 @@
 package main
 
 import (
-	"ecommerce-api/cmd/server/internal/routes"
+	"log"
+	"os"
+
+	"ecommerce-api/internal/routes"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	r := gin.Default()
 
+	// Load environment variables
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("No .env file found")
+	}
+
+	// Ensure JWT secret exists
+	if os.Getenv("JWT_SECRET") == "" {
+		log.Fatal("JWT_SECRET not set in environment")
+	}
+
+	r := gin.Default()
+	r.SetTrustedProxies(nil)
+
+	// Root route
 	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "Ecommerce API running"})
+		c.JSON(200, gin.H{
+			"message": "eCommerce API running 🚀",
+		})
+	})
+
+	// Ignore favicon
+	r.GET("/favicon.ico", func(c *gin.Context) {
+		c.Status(204)
 	})
 
 	routes.SetupRoutes(r)
 
-	r.Run(":8080")
+	// Dynamic port for production
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	r.Run(":" + port)
 }
