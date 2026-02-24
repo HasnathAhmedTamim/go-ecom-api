@@ -6,4 +6,5 @@ type User struct {
 	Email        string `json:"email"`
 	PasswordHash string `json:"-"`
 	Role         string `json:"role"`
+	Blocked      bool   `json:"blocked"`
 }

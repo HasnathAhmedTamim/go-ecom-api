@@ -77,3 +77,28 @@ func Login(c *gin.Context) {
 		"token": token,
 	})
 }
+
+func AdminListUsers(c *gin.Context) {
+	c.JSON(http.StatusOK, services.GetAllUsers())
+}
+
+func AdminBlockUser(c *gin.Context) {
+	id := c.Param("id")
+
+	var input struct {
+		Blocked bool `json:"blocked"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updated, err := services.SetUserBlocked(id, input.Blocked)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, updated)
+}

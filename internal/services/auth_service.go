@@ -4,8 +4,7 @@ import (
 	"errors"
 
 	"ecommerce-api/internal/models"
-
-	"golang.org/x/crypto/bcrypt"
+	"ecommerce-api/internal/utils"
 )
 
 var users = []models.User{}
@@ -19,16 +18,13 @@ func RegisterUser(user models.User) (models.User, error) {
 		}
 	}
 
-	// Hash password
-	hashedPassword, err := bcrypt.GenerateFromPassword(
-		[]byte(user.PasswordHash),
-		bcrypt.DefaultCost,
-	)
+	// Hash password using utils
+	hashedPassword, err := utils.HashPassword(user.PasswordHash)
 	if err != nil {
 		return models.User{}, errors.New("failed to hash password")
 	}
 
-	user.PasswordHash = string(hashedPassword)
+	user.PasswordHash = hashedPassword
 
 	users = append(users, user)
 	return user, nil
@@ -39,12 +35,11 @@ func Authenticate(email, password string) (models.User, error) {
 	for _, u := range users {
 		if u.Email == email {
 
-			err := bcrypt.CompareHashAndPassword(
-				[]byte(u.PasswordHash),
-				[]byte(password),
-			)
+			if u.Blocked {
+				return models.User{}, errors.New("user is blocked")
+			}
 
-			if err != nil {
+			if !utils.CheckPassword(password, u.PasswordHash) {
 				return models.User{}, errors.New("invalid credentials")
 			}
 
@@ -53,4 +48,18 @@ func Authenticate(email, password string) (models.User, error) {
 	}
 
 	return models.User{}, errors.New("invalid credentials")
+}
+
+func GetAllUsers() []models.User {
+	return users
+}
+
+func SetUserBlocked(id string, blocked bool) (models.User, error) {
+	for i, u := range users {
+		if u.ID == id {
+			users[i].Blocked = blocked
+			return users[i], nil
+		}
+	}
+	return models.User{}, errors.New("user not found")
 }

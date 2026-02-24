@@ -15,7 +15,10 @@ func CreateOrder(c *gin.Context) {
 		Products map[string]int `json:"products"`
 	}
 
-	c.ShouldBindJSON(&input)
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	order := models.Order{
 		ID:       utils.GenerateID(),
@@ -24,7 +27,13 @@ func CreateOrder(c *gin.Context) {
 		Status:   "pending",
 	}
 
-	c.JSON(http.StatusCreated, services.CreateOrder(order))
+	created, err := services.CreateOrder(order)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, created)
 }
 
 func GetUserOrders(c *gin.Context) {
@@ -34,4 +43,51 @@ func GetUserOrders(c *gin.Context) {
 
 func GetAllOrders(c *gin.Context) {
 	c.JSON(http.StatusOK, services.GetAllOrders())
+}
+
+// User can cancel their own order
+func UserUpdateOrderStatus(c *gin.Context) {
+	id := c.Param("id")
+	userID := c.GetString("user_id")
+
+	var input struct {
+		Status string `json:"status"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updated, err := services.UpdateOrderStatus(id, userID, input.Status, false)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, updated)
+}
+
+// Admin can update any order status
+func AdminUpdateOrderStatus(c *gin.Context) {
+	id := c.Param("id")
+	// admin middleware ensures role is admin; retrieve user_id for audit if needed
+	adminID := c.GetString("user_id")
+
+	var input struct {
+		Status string `json:"status"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updated, err := services.UpdateOrderStatus(id, adminID, input.Status, true)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, updated)
 }

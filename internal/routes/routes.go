@@ -23,6 +23,9 @@ func SetupRoutes(r *gin.Engine) {
 		admin.PUT("/products/:id", handlers.UpdateProduct)
 		admin.DELETE("/products/:id", handlers.DeleteProduct)
 		admin.GET("/orders", handlers.GetAllOrders)
+		admin.GET("/users", handlers.AdminListUsers)
+		admin.PUT("/users/:id/block", handlers.AdminBlockUser)
+		admin.PUT("/orders/:id/status", handlers.AdminUpdateOrderStatus)
 	}
 
 	user := api.Group("/user")
@@ -30,5 +33,6 @@ func SetupRoutes(r *gin.Engine) {
 	{
 		user.POST("/orders", handlers.CreateOrder)
 		user.GET("/orders", handlers.GetUserOrders)
+		user.PUT("/orders/:id/status", handlers.UserUpdateOrderStatus)
 	}
 }
