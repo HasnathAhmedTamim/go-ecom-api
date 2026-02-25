@@ -6,6 +6,7 @@ import (
 
 	"ecommerce-api/internal/routes"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -24,6 +25,8 @@ func main() {
 	}
 
 	r := gin.Default()
+	// Allow CORS so the Vite frontend can call the API during development
+	r.Use(cors.Default())
 	r.SetTrustedProxies(nil)
 
 	// Root route
