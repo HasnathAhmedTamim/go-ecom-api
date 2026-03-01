@@ -1,3 +1,60 @@
+# Frontend (Landing demo)
+
+This folder contains the frontend for the Micro‑SaaS Dashboard landing/demo built with Vite, React and Tailwind.
+
+Quick start
+
+1. Install dependencies:
+
+```bash
+cd frontend
+npm install
+```
+
+2. Run the dev server:
+
+```bash
+npm run dev
+```
+
+- The Vite dev server runs on `http://localhost:5173` (or next available port).
+- The marketing landing is available at `/landing`.
+
+Mock API (dev-only)
+
+- A lightweight dev middleware (`src/mocks/devApiMiddleware.js`) returns mock JSON for `/api/*` endpoints when the backend is unavailable. This lets you develop and preview the landing/demo without running the Go backend.
+
+Backend notes
+
+- The backend (Go server) uses `go-sqlite3`, which requires CGO. On Windows you must have a C toolchain available and run with CGO enabled. Example (PowerShell):
+
+```powershell
+setx CGO_ENABLED 1
+# ensure a C toolchain (MSYS2 or MinGW) is installed and in PATH
+cd ../backend
+go run cmd/server/main.go
+```
+
+If you prefer not to run the backend locally, the frontend mock covers basic product endpoints used by the landing and demo pages.
+
+Packaging / ThemeForest notes
+
+- Include the following in the final package: compiled/minified `dist` build, `index.html` demo, `src` (components + styles), `README.md`, and Figma sources (if available).
+- Provide clear install and demo instructions, list features (dark mode, RTL, responsive components, Storybook), and include screenshots and an accessible demo URL.
+
+Files of interest
+
+- `src/pages/Landing.jsx` — landing page entry
+- `src/components/LandingHero.jsx` — hero section
+- `src/components/Features.jsx` — features grid
+- `src/mocks/devApiMiddleware.js` — dev mock middleware
+- `vite.config.js` — Vite config with proxy + dev mock
+
+Screenshots
+
+- `screenshots/hero-1.svg` — hero / dashboard preview mock
+- `screenshots/feature-grid.svg` — feature grid preview
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

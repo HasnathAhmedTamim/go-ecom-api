@@ -91,3 +91,22 @@ func AdminUpdateOrderStatus(c *gin.Context) {
 
 	c.JSON(http.StatusOK, updated)
 }
+
+func GetOrderByID(c *gin.Context) {
+	id := c.Param("id")
+	userID := c.GetString("user_id")
+
+	// fetch order and ensure it belongs to requesting user
+	order, err := services.GetOrderByID(id)
+	if err != nil {
+		c.JSON(404, gin.H{"error": "order not found"})
+		return
+	}
+
+	if order.UserID != userID {
+		c.JSON(403, gin.H{"error": "forbidden"})
+		return
+	}
+
+	c.JSON(200, order)
+}

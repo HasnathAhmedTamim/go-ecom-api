@@ -34,6 +34,15 @@ func GetOrdersByUser(userID string) []models.Order {
 	return userOrders
 }
 
+func GetOrderByID(id string) (models.Order, error) {
+	for _, o := range orders {
+		if o.ID == id {
+			return o, nil
+		}
+	}
+	return models.Order{}, errors.New("order not found")
+}
+
 func GetAllOrders() []models.Order {
 	return orders
 }

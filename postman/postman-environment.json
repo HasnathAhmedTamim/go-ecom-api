@@ -1,0 +1,16 @@
+{
+  "id": "a9b9f1b3-6c2d-4f2a-b7d6-8a3c2e7d9f11",
+  "name": "Local Dev",
+  "values": [
+    { "key": "baseUrl", "value": "http://localhost:5176", "enabled": true },
+    { "key": "user_token", "value": "", "enabled": true },
+    { "key": "admin_token", "value": "", "enabled": true },
+    { "key": "product_id", "value": "", "enabled": true },
+    { "key": "created_product_id", "value": "", "enabled": true },
+    { "key": "sample_product_id", "value": "ab6cc690-de98-4642-a027-9e04728f719d", "enabled": true },
+    { "key": "admin_email", "value": "admin@local.com", "enabled": true },
+    { "key": "admin_password", "value": "adminpass", "enabled": true },
+    { "key": "timestamp", "value": "{{timestamp}}", "enabled": true }
+  ],
+  "timestamp": 0
+}

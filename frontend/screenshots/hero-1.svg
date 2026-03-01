@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" rx="8" fill="#eef2ff" />
+  <g transform="translate(48,48)">
+    <rect width="520" height="36" rx="6" fill="#eef2ff" />
+    <rect y="64" width="1104" height="14" rx="6" fill="#e6eefc" />
+    <rect y="90" width="720" height="12" rx="6" fill="#dbeafe" />
+    <rect x="0" y="120" width="520" height="260" rx="10" fill="#fff" stroke="#c7d2fe"/>
+    <rect x="548" y="120" width="520" height="120" rx="8" fill="#fff" stroke="#c7d2fe"/>
+    <rect x="548" y="252" width="360" height="128" rx="8" fill="#fff" stroke="#c7d2fe"/>
+  </g>
+  <text x="60" y="40" fill="#3730a3" font-size="20" font-family="Arial">Landing demo screenshot</text>
+</svg>

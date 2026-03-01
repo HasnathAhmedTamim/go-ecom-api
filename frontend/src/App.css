@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+/* Landing tweaks */
+.container { max-width: 1100px }
+
+.hero-card {
+	background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+	backdrop-filter: blur(4px);
+}
+
+@media (max-width: 768px) {
+	.hero-card { padding: 1rem }
+}
+
+.feature-grid { gap: 1.25rem }

@@ -4,7 +4,9 @@ import (
 	"log"
 	"os"
 
+	"ecommerce-api/internal/db"
 	"ecommerce-api/internal/routes"
+	"ecommerce-api/internal/services"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -42,6 +44,14 @@ func main() {
 	})
 
 	routes.SetupRoutes(r)
+
+	// Initialize DB (creates data.db in backend/)
+	if _, err := db.Init(""); err != nil {
+		log.Fatal("failed to init db:", err)
+	}
+
+	// Seed demo data for local development (will use DB-backed services)
+	services.SeedDemoData()
 
 	// Dynamic port for production
 	port := os.Getenv("PORT")

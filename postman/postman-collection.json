@@ -1,0 +1,204 @@
+{
+  "info": {
+    "_postman_id": "b1d9b6e2-4f4a-4a5f-9d2b-3f2f6a9f0c1a",
+    "name": "MicroSaaS Dashboard - API Tests",
+    "description": "Collection for local API smoke tests: auth, products, orders, and admin flows.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints: login and register. Use Login (admin) to populate admin_token.",
+      "item": [
+        {
+          "name": "Login (user)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@local.com\",\n  \"password\": \"password\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) { pm.environment.set('user_token', res.token); pm.environment.set('user_id', res.user?.id || ''); }",
+                  "pm.test('Login success', () => pm.response.code === 200);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login (admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@local.com\",\n  \"password\": \"adminpass\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) { pm.environment.set('admin_token', res.token); pm.environment.set('admin_id', res.user?.id || ''); }",
+                  "pm.test('Admin login success', () => pm.response.code === 200);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register (sample)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test+{{timestamp}}@local.com\",\n  \"password\": \"testpass\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api","auth","register"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "description": "Public product catalog endpoints (listing and details).",
+      "item": [
+        {
+          "name": "List products",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/products", "host": ["{{baseUrl}}"], "path": ["api","products"] } }
+        },
+        {
+          "name": "Get product by id",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/products/{{product_id}}", "host": ["{{baseUrl}}"], "path": ["api","products","{{product_id}}"] } }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "description": "User order endpoints. Use authenticated user token for create/list calls.",
+      "item": [
+        {
+          "name": "Create order (user)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{user_token}}" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"items\": [{ \"id\": \"{{sample_product_id}}\", \"qty\": 1 }],\n  \"address\": \"123 Demo St\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/user/orders", "host": ["{{baseUrl}}"], "path": ["api","user","orders"] }
+          }
+        },
+        {
+          "name": "List my orders",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{user_token}}" } ], "url": { "raw": "{{baseUrl}}/api/user/orders", "host": ["{{baseUrl}}"], "path": ["api","user","orders"] } }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Admin-only actions (requires admin_token). The collection will auto-login when admin_token is missing.",
+      "item": [
+        {
+          "name": "Create product (admin)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{admin_token}}" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Postman Product\",\n  \"price\": 12.5,\n  \"stock\": 5\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/products", "host": ["{{baseUrl}}"], "path": ["api","admin","products"] }
+          },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "exec": [
+                    "if (!pm.environment.get('admin_token')) {",
+                    "  pm.sendRequest({",
+                    "    url: pm.environment.get('baseUrl') + '/api/auth/login',",
+                    "    method: 'POST',",
+                    "    header: { 'Content-Type': 'application/json' },",
+                    "    body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('admin_email'), password: pm.environment.get('admin_password') }) }",
+                    "  }, function (err, res) {",
+                    "    if (!err && res && res.code === 200) {",
+                    "      var json = res.json();",
+                    "      if (json.token) pm.environment.set('admin_token', json.token);",
+                    "    }",
+                    "  });",
+                    "}"
+                  ]
+                }
+              },
+              { "listen": "test", "script": { "exec": [ "const r = pm.response.json(); if (r.id) pm.environment.set('created_product_id', r.id); pm.test('created', () => pm.response.code === 201);" ] } }
+            ]
+        },
+        {
+          "name": "List admin products",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products", "host": ["{{baseUrl}}"], "path": ["api","products"] }
+          }
+        },
+        {
+          "name": "Delete product (admin)",
+          "request": { "method": "DELETE", "header": [ { "key": "Authorization", "value": "Bearer {{admin_token}}" } ], "url": { "raw": "{{baseUrl}}/api/admin/products/{{created_product_id}}", "host": ["{{baseUrl}}"], "path": ["api","admin","products","{{created_product_id}}"] } },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "if (!pm.environment.get('admin_token')) {",
+                  "  pm.sendRequest({",
+                  "    url: pm.environment.get('baseUrl') + '/api/auth/login',",
+                  "    method: 'POST',",
+                  "    header: { 'Content-Type': 'application/json' },",
+                  "    body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('admin_email'), password: pm.environment.get('admin_password') }) }",
+                  "  }, function (err, res) {",
+                  "    if (!err && res && res.code === 200) {",
+                  "      var json = res.json();",
+                  "      if (json.token) pm.environment.set('admin_token', json.token);",
+                  "    }",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List admin orders",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{admin_token}}" } ], "url": { "raw": "{{baseUrl}}/api/admin/orders", "host": ["{{baseUrl}}"], "path": ["api","admin","orders"] } },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "if (!pm.environment.get('admin_token')) {",
+                  "  pm.sendRequest({",
+                  "    url: pm.environment.get('baseUrl') + '/api/auth/login',",
+                  "    method: 'POST',",
+                  "    header: { 'Content-Type': 'application/json' },",
+                  "    body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('admin_email'), password: pm.environment.get('admin_password') }) }",
+                  "  }, function (err, res) {",
+                  "    if (!err && res && res.code === 200) {",
+                  "      var json = res.json();",
+                  "      if (json.token) pm.environment.set('admin_token', json.token);",
+                  "    }",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

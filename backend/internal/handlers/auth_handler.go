@@ -102,3 +102,28 @@ func AdminBlockUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, updated)
 }
+
+func Me(c *gin.Context) {
+	// AuthMiddleware sets user_id in context
+	uidVal, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(401, gin.H{"error": "unauthenticated"})
+		return
+	}
+
+	uid, ok := uidVal.(string)
+	if !ok || uid == "" {
+		c.JSON(401, gin.H{"error": "unauthenticated"})
+		return
+	}
+
+	user, err := services.GetUserByID(uid)
+	if err != nil {
+		c.JSON(404, gin.H{"error": "user not found"})
+		return
+	}
+
+	// Do not return password hash
+	user.PasswordHash = ""
+	c.JSON(200, gin.H{"user": user})
+}

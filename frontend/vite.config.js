@@ -6,13 +6,19 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      // proxy any /api requests to the backend during development
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        onError: (err, req, res) => {
+          if (res && !res.writableEnded) {
+            res.writeHead && res.writeHead(502, { 'Content-Type': 'text/plain' })
+            res.end('Backend unavailable (dev proxy)')
+          }
+        },
       },
     },
+    // Enable the mock middleware when running Vite in dev mode
+    middlewareMode: false,
   },
 })
