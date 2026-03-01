@@ -115,3 +115,9 @@ func DeleteProduct(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "product deleted"})
 }
+
+// Admin-only: list all products with full details
+func GetAdminProducts(c *gin.Context) {
+	items := services.GetAllProducts()
+	c.JSON(http.StatusOK, items)
+}

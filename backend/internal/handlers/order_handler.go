@@ -13,6 +13,10 @@ import (
 func CreateOrder(c *gin.Context) {
 	var input struct {
 		Products map[string]int `json:"products"`
+		Items    []struct {
+			ID  string `json:"id"`
+			Qty int    `json:"qty"`
+		} `json:"items"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -20,10 +24,21 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
+	// support two payload shapes:
+	// 1) { "products": { "id": qty } }
+	// 2) { "items": [{ "id": "..", "qty": n }, ...] }
+	productsMap := input.Products
+	if productsMap == nil && len(input.Items) > 0 {
+		productsMap = map[string]int{}
+		for _, it := range input.Items {
+			productsMap[it.ID] += it.Qty
+		}
+	}
+
 	order := models.Order{
 		ID:       utils.GenerateID(),
 		UserID:   c.GetString("user_id"),
-		Products: input.Products,
+		Products: productsMap,
 		Status:   "pending",
 	}
 

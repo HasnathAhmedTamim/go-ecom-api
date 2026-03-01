@@ -33,7 +33,7 @@ func SeedDemoData() {
 		demo := models.User{
 			ID:           utils.GenerateID(),
 			Name:         "Demo User",
-			Email:        "demo@local",
+			Email:        "demo@local.com",
 			PasswordHash: "password",
 			Role:         "user",
 		}
@@ -46,7 +46,7 @@ func SeedDemoData() {
 		admin := models.User{
 			ID:           utils.GenerateID(),
 			Name:         "Admin",
-			Email:        "admin@local",
+			Email:        "admin@local.com",
 			PasswordHash: "adminpass",
 			Role:         "admin",
 		}

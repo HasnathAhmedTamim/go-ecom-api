@@ -1,0 +1,50 @@
+name: Smoke Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Install backend deps
+        working-directory: backend
+        run: |
+          go env
+          go mod download
+
+      - name: Start backend
+        shell: bash
+        run: |
+          export JWT_SECRET=ci-secret
+          # build a fresh binary and run it to avoid running stale processes
+          (cd backend && go build -o server ./cmd/server)
+          nohup backend/server > backend.log 2>&1 &
+          echo "started backend"
+          # wait for server to become healthy
+          for i in {1..15}; do
+            if curl -sSf http://localhost:8080/api/ >/dev/null 2>&1; then
+              echo "backend healthy"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Run smoke script
+        run: |
+          go run ./tools/smoke.go
+
+      - name: Dump backend log
+        if: failure()
+        run: |
+          echo "=== backend.log ==="
+          sed -n '1,200p' backend.log || true

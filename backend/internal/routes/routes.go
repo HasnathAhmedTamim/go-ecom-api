@@ -32,6 +32,8 @@ func SetupRoutes(r *gin.Engine) {
 	admin := api.Group("/admin")
 	admin.Use(middleware.AuthMiddleware(), middleware.AdminMiddleware())
 	{
+		// Admin-only product listing
+		admin.GET("/products", handlers.GetAdminProducts)
 		admin.POST("/products", handlers.CreateProduct)
 		admin.PUT("/products/:id", handlers.UpdateProduct)
 		admin.DELETE("/products/:id", handlers.DeleteProduct)

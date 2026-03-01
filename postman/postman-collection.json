@@ -95,10 +95,64 @@
             "body": { "mode": "raw", "raw": "{\n  \"items\": [{ \"id\": \"{{sample_product_id}}\", \"qty\": 1 }],\n  \"address\": \"123 Demo St\"\n}" },
             "url": { "raw": "{{baseUrl}}/api/user/orders", "host": ["{{baseUrl}}"], "path": ["api","user","orders"] }
           }
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "if (!pm.environment.get('user_token')) {",
+                  "  pm.sendRequest({",
+                  "    url: pm.environment.get('baseUrl') + '/api/auth/login',",
+                  "    method: 'POST',",
+                  "    header: { 'Content-Type': 'application/json' },",
+                  "    body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('user_email'), password: pm.environment.get('user_password') }) }",
+                  "  }, function (err, res) {",
+                  "    if (!err && res && res.code === 200) {",
+                  "      var json = res.json();",
+                  "      if (json.token) { pm.environment.set('user_token', json.token); pm.environment.set('user_id', json.user?.id || ''); }",
+                  "    }",
+                  "  });",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.id) pm.environment.set('last_order_id', r.id);",
+                  "pm.test('Order created', () => pm.response.code === 201);"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "List my orders",
-          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{user_token}}" } ], "url": { "raw": "{{baseUrl}}/api/user/orders", "host": ["{{baseUrl}}"], "path": ["api","user","orders"] } }
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{user_token}}" } ], "url": { "raw": "{{baseUrl}}/api/user/orders", "host": ["{{baseUrl}}"], "path": ["api","user","orders"] } },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "if (!pm.environment.get('user_token')) {",
+                  "  pm.sendRequest({",
+                  "    url: pm.environment.get('baseUrl') + '/api/auth/login',",
+                  "    method: 'POST',",
+                  "    header: { 'Content-Type': 'application/json' },",
+                  "    body: { mode: 'raw', raw: JSON.stringify({ email: pm.environment.get('user_email'), password: pm.environment.get('user_password') }) }",
+                  "  }, function (err, res) {",
+                  "    if (!err && res && res.code === 200) {",
+                  "      var json = res.json();",
+                  "      if (json.token) { pm.environment.set('user_token', json.token); pm.environment.set('user_id', json.user?.id || ''); }",
+                  "    }",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
