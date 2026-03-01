@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from '../api'
 import useToastStore from '../stores/useToastStore'
+import { useAuthStore } from '../stores/useAuthStore'
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([])
@@ -9,7 +10,15 @@ export default function AdminProducts() {
 
   useEffect(() => {
     let mounted = true
-    api.get('/api/products').then((res) => mounted && setProducts(res.data)).catch((e) => mounted && setErr(e.message)).finally(() => mounted && setLoading(false))
+    api
+      .get('/api/products')
+      .then((res) => {
+        const data = res.data
+        const items = data && data.items ? data.items : data
+        if (mounted) setProducts(items)
+      })
+      .catch((e) => mounted && setErr(e.message))
+      .finally(() => mounted && setLoading(false))
     return () => (mounted = false)
   }, [])
 
@@ -21,6 +30,7 @@ export default function AdminProducts() {
     try {
       await api.delete(`/api/admin/products/${id}`)
       setProducts((p) => p.filter((x) => x.id !== id))
+      window.dispatchEvent(new Event('products:changed'))
       push({ type: 'success', title: 'Product deleted' })
     } catch (e) {
       push({ type: 'error', title: 'Delete failed' })
