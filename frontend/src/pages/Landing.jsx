@@ -4,16 +4,16 @@ import Features from '../components/Features'
 
 const Landing = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black text-gray-200">
       <LandingHero />
       <Features />
-      <section className="bg-gray-50 py-12">
+      <section className="bg-black/20 py-12">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-semibold mb-4">Ready to try?</h2>
-          <p className="mb-6 text-gray-600 max-w-xl mx-auto">Start your free trial — no credit card required. Deploy a sandbox in seconds and import demo data.</p>
+          <h2 className="text-2xl font-semibold mb-4 text-white">Ready to try?</h2>
+          <p className="mb-6 text-gray-300 max-w-xl mx-auto">Start your free trial — no credit card required. Deploy a sandbox in seconds and import demo data.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="/register" className="px-6 py-3 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700">Get Started</a>
-            <a href="/login" className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-md">Sign In</a>
+            <a href="/register" className="px-6 py-3 bg-neon-pink text-black rounded-md shadow-neon hover:brightness-95">Get Started</a>
+            <a href="/login" className="px-6 py-3 border border-neon-cyan text-neon-cyan rounded-md">Sign In</a>
           </div>
         </div>
       </section>

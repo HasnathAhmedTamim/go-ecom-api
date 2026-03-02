@@ -8,11 +8,11 @@ export default function AdminDashboard() {
         <div>
           <OrderStats />
         </div>
-        <div className="p-4 border rounded bg-white">
-          <h2 className="font-medium">Quick Links</h2>
+        <div className="p-4 border rounded bg-black/60 text-gray-300 border-white/5">
+          <h2 className="font-medium text-white">Quick Links</h2>
           <div className="mt-2 space-y-2">
-            <a href="/admin/products" className="text-blue-600 block">Manage Products</a>
-            <a href="/admin/orders" className="text-blue-600 block">Manage Orders</a>
+            <a href="/admin/products" className="text-neon-cyan block">Manage Products</a>
+            <a href="/admin/orders" className="text-neon-cyan block">Manage Orders</a>
           </div>
         </div>
       </div>

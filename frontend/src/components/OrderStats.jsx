@@ -32,13 +32,13 @@ export default function OrderStats() {
     return () => window.removeEventListener('products:changed', handler)
   }, [fetchStats])
 
-  if (loading) return <div>Loading stats...</div>
+  if (loading) return <div className="text-gray-300">Loading stats...</div>
 
   return (
-    <div className="p-4 border rounded bg-white">
-      <h2 className="text-lg font-medium">Order Statistics</h2>
+    <div className="p-4 border rounded bg-black/60 text-gray-300 border-white/5">
+      <h2 className="text-lg font-medium text-white">Order Statistics</h2>
       <div className="mt-2 text-sm">
-        <p><strong>Total revenue:</strong> ${stats.totalRevenue.toFixed(2)}</p>
+        <p><strong>Total revenue:</strong> <span className="text-neon-cyan">${stats.totalRevenue.toFixed(2)}</span></p>
         <p><strong>Orders:</strong> {stats.count}</p>
         <div className="mt-2">
           <strong>By status:</strong>
@@ -49,7 +49,7 @@ export default function OrderStats() {
           </ul>
         </div>
         <div className="mt-3">
-          <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={fetchStats}>Refresh</button>
+          <button className="px-3 py-1 bg-neon-pink text-black rounded" onClick={fetchStats}>Refresh</button>
         </div>
       </div>
     </div>

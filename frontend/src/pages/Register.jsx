@@ -25,26 +25,26 @@ export default function Register() {
   }
 
   return (
-    <section className="max-w-md mx-auto mt-8 bg-white rounded-lg shadow p-6">
-      <h1 className="text-2xl font-semibold mb-4">Create an account</h1>
+    <section className="max-w-md mx-auto mt-8 bg-black/60 rounded-lg shadow-neon p-6 border border-white/5">
+      <h1 className="text-2xl font-semibold mb-4 text-white">Create an account</h1>
       <form onSubmit={submit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Name</label>
-          <input className="border p-2 w-full rounded" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
+          <label className="block text-sm font-medium mb-1 text-gray-300">Name</label>
+          <input className="border p-2 w-full rounded bg-black text-gray-200 border-white/10" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <input className="border p-2 w-full rounded" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+          <label className="block text-sm font-medium mb-1 text-gray-300">Email</label>
+          <input className="border p-2 w-full rounded bg-black text-gray-200 border-white/10" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Password</label>
-          <input type="password" className="border p-2 w-full rounded" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Choose a password" />
+          <label className="block text-sm font-medium mb-1 text-gray-300">Password</label>
+          <input type="password" className="border p-2 w-full rounded bg-black text-gray-200 border-white/10" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Choose a password" />
         </div>
         <div className="flex items-center justify-between">
           <Button type="submit">Create account</Button>
-          <Link to="/login" className="text-sm text-blue-600">Already have an account?</Link>
+          <Link to="/login" className="text-sm text-neon-cyan">Already have an account?</Link>
         </div>
-        {error && <div className="text-red-600 mt-2">{error}</div>}
+        {error && <div className="text-red-400 mt-2">{error}</div>}
       </form>
     </section>
   )

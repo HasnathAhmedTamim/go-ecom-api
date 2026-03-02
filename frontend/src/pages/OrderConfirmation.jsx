@@ -23,17 +23,17 @@ export default function OrderConfirmation() {
   if (!order) return <div>Order not found</div>
 
   return (
-    <section className="max-w-xl mx-auto mt-8 bg-white rounded-lg shadow p-6">
-      <h1 className="text-2xl font-semibold mb-4">Order Placed</h1>
-      <div className="mb-2">Order ID: <strong>{order.id}</strong></div>
-      <div className="mb-2">Status: {order.status}</div>
-      <div className="mb-4">Products:</div>
+    <section className="max-w-xl mx-auto mt-8 bg-black/60 rounded-lg shadow-neon p-6 border border-white/5">
+      <h1 className="text-2xl font-semibold mb-4 text-white">Order Placed</h1>
+      <div className="mb-2 text-gray-300">Order ID: <strong className="text-white">{order.id}</strong></div>
+      <div className="mb-2 text-gray-300">Status: <span className="text-neon-cyan">{order.status}</span></div>
+      <div className="mb-4 text-gray-300">Products:</div>
       <ul className="mb-4">
         {Object.entries(order.products || {}).map(([pid, qty]) => (
-          <li key={pid} className="py-1">{pid} — qty: {qty}</li>
+          <li key={pid} className="py-1 text-gray-300">{pid} — qty: {qty}</li>
         ))}
       </ul>
-      <Link to="/orders" className="text-blue-600">View all orders</Link>
+      <Link to="/orders" className="text-neon-cyan">View all orders</Link>
     </section>
   )
 }

@@ -47,6 +47,7 @@ func SetupRoutes(r *gin.Engine) {
 	user.Use(middleware.AuthMiddleware())
 	{
 		user.POST("/orders", handlers.CreateOrder)
+		user.POST("/checkout", handlers.Checkout)
 		user.GET("/orders", handlers.GetUserOrders)
 		user.GET("/orders/:id", handlers.GetOrderByID)
 		user.PUT("/orders/:id/status", handlers.UserUpdateOrderStatus)
