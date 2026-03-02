@@ -8,50 +8,50 @@ import (
 	"ecommerce-api/internal/models"
 )
 
-func GetAllProducts() []models.Product {
+func GetAllProducts() []models.ProductDetail {
 	d := db.DB()
-	rows, err := d.Query("SELECT id, name, price, stock FROM products")
+	rows, err := d.Query("SELECT id, name, price, stock, image, description, category, brand FROM products")
 	if err != nil {
-		return []models.Product{}
+		return []models.ProductDetail{}
 	}
 	defer rows.Close()
-	out := []models.Product{}
+	out := []models.ProductDetail{}
 	for rows.Next() {
-		var p models.Product
-		rows.Scan(&p.ID, &p.Name, &p.Price, &p.Stock)
+		var p models.ProductDetail
+		rows.Scan(&p.ID, &p.Name, &p.Price, &p.Stock, &p.Image, &p.Description, &p.Category, &p.Brand)
 		out = append(out, p)
 	}
 	return out
 }
 
-func GetProductByID(id string) (models.Product, error) {
+func GetProductByID(id string) (models.ProductDetail, error) {
 	d := db.DB()
-	var p models.Product
-	row := d.QueryRow("SELECT id, name, price, stock FROM products WHERE id = ?", id)
-	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Stock); err != nil {
+	var p models.ProductDetail
+	row := d.QueryRow("SELECT id, name, price, stock, image, description, category, brand FROM products WHERE id = ?", id)
+	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Stock, &p.Image, &p.Description, &p.Category, &p.Brand); err != nil {
 		if err == sql.ErrNoRows {
-			return models.Product{}, fmt.Errorf("product not found")
+			return models.ProductDetail{}, fmt.Errorf("product not found")
 		}
-		return models.Product{}, err
+		return models.ProductDetail{}, err
 	}
 	return p, nil
 }
 
-func CreateProduct(p models.Product) models.Product {
+func CreateProduct(p models.ProductDetail) models.ProductDetail {
 	d := db.DB()
-	d.Exec("INSERT INTO products(id,name,price,stock) VALUES(?,?,?,?)", p.ID, p.Name, p.Price, p.Stock)
+	d.Exec("INSERT INTO products(id,name,price,stock,image,description,category,brand) VALUES(?,?,?,?,?,?,?,?)", p.ID, p.Name, p.Price, p.Stock, p.Image, p.Description, p.Category, p.Brand)
 	return p
 }
 
-func UpdateProduct(id string, updated models.Product) (models.Product, error) {
+func UpdateProduct(id string, updated models.ProductDetail) (models.ProductDetail, error) {
 	d := db.DB()
-	res, err := d.Exec("UPDATE products SET name=?,price=?,stock=? WHERE id=?", updated.Name, updated.Price, updated.Stock, id)
+	res, err := d.Exec("UPDATE products SET name=?,price=?,stock=?,image=?,description=?,category=?,brand=? WHERE id=?", updated.Name, updated.Price, updated.Stock, updated.Image, updated.Description, updated.Category, updated.Brand, id)
 	if err != nil {
-		return models.Product{}, err
+		return models.ProductDetail{}, err
 	}
 	affected, _ := res.RowsAffected()
 	if affected == 0 {
-		return models.Product{}, fmt.Errorf("product not found")
+		return models.ProductDetail{}, fmt.Errorf("product not found")
 	}
 	return updated, nil
 }

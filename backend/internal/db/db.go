@@ -44,11 +44,15 @@ func migrate() error {
             blocked INTEGER DEFAULT 0
         );`,
 		`CREATE TABLE IF NOT EXISTS products (
-            id TEXT PRIMARY KEY,
-            name TEXT,
-            price REAL,
-            stock INTEGER
-        );`,
+			id TEXT PRIMARY KEY,
+			name TEXT,
+			price REAL,
+			stock INTEGER,
+			image TEXT,
+			description TEXT,
+			category TEXT,
+			brand TEXT
+		);`,
 		`CREATE TABLE IF NOT EXISTS orders (
             id TEXT PRIMARY KEY,
             user_id TEXT,

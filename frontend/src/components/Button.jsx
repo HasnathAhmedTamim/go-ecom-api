@@ -3,7 +3,7 @@ export default function Button({ children, className = '', ...props }) {
     <button
       {...props}
       className={
-        'inline-flex items-center justify-center px-4 py-2 rounded-md shadow-sm bg-blue-600 hover:bg-blue-700 text-white font-medium transition ' +
+        'inline-flex items-center justify-center px-4 py-2 rounded-md shadow-neon bg-neon-pink hover:brightness-95 text-black font-semibold transition ' +
         className
       }
     >

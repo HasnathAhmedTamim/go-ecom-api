@@ -13,3 +13,17 @@
 }
 
 .feature-grid { gap: 1.25rem }
+
+/* Neon theme helpers */
+:root {
+  --neon-cyan: #00f5ff;
+  --neon-pink: #ff2d95;
+}
+
+.text-neon-cyan { color: var(--neon-cyan) }
+.bg-neon-pink { background: var(--neon-pink) }
+.shadow-neon { box-shadow: 0 6px 30px rgba(0,245,255,0.06), 0 2px 8px rgba(255,45,149,0.06) }
+.drop-shadow-neon { text-shadow: 0 2px 12px rgba(0,245,255,0.08) }
+.bg-black { background-color: #060606 }
+.text-neon-pink { color: var(--neon-pink) }
+.border-neon-cyan\/10 { border-color: rgba(0,245,255,0.1) }

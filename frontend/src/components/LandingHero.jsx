@@ -3,26 +3,28 @@ import HeroMock from '../assets/hero-mock.svg'
 
 const LandingHero = () => {
   return (
-    <header role="banner" className="bg-gradient-to-r from-indigo-600 to-indigo-400 text-white py-16 md:py-24">
+    <header role="banner" className="bg-black text-neon-cyan py-20">
       <div className="container mx-auto px-4 flex flex-col-reverse md:flex-row items-center gap-8">
         <div className="w-full md:w-1/2 text-center md:text-left">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">Analytics built for growth</h1>
-          <p className="mt-4 text-indigo-100 max-w-xl mx-auto md:mx-0">A modular, fast dashboard with reusable widgets, easy billing, and granular permissions — ship faster and understand users in minutes.</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-white drop-shadow-neon">GameHub — Gear for Champions</h1>
+          <p className="mt-4 text-gray-300 max-w-xl mx-auto md:mx-0">High-performance peripherals, ergonomics-first chairs, and pro-grade accessories with neon flair. Tune your setup for comfort and competitive advantage.</p>
           <div className="mt-6 flex justify-center md:justify-start gap-3">
-            <a href="/register" aria-label="Start free trial" className="px-5 py-3 bg-white text-indigo-600 rounded-md font-medium shadow">Start free trial</a>
-            <a href="/login" aria-label="Sign in" className="px-5 py-3 border border-white text-white rounded-md">Sign in</a>
+            <a href="/products" aria-label="Shop now" className="px-5 py-3 bg-neon-pink text-black rounded-md font-semibold shadow-neon">Shop Now</a>
+            <a href="/admin/products" aria-label="Admin" className="px-5 py-3 border border-neon-cyan text-neon-cyan rounded-md">Admin</a>
           </div>
-          <ul className="mt-6 grid grid-cols-3 gap-3 text-indigo-100 max-w-sm mx-auto md:mx-0">
-            <li className="text-sm"><strong>SSO-ready</strong></li>
-            <li className="text-sm"><strong>Realtime</strong></li>
-            <li className="text-sm"><strong>Multi-tenant</strong></li>
+          <ul className="mt-6 grid grid-cols-3 gap-3 text-gray-400 max-w-sm mx-auto md:mx-0">
+            <li className="text-sm"><strong className="text-white">Free shipping</strong></li>
+            <li className="text-sm"><strong className="text-white">30-day returns</strong></li>
+            <li className="text-sm"><strong className="text-white">1-year warranty</strong></li>
           </ul>
         </div>
+
         <div className="w-full md:w-1/2 flex justify-center md:justify-end">
-          <div className="bg-white/10 rounded-xl p-3 hero-card shadow-lg w-full max-w-md">
-            <div className="rounded-lg overflow-hidden">
-              <img src={HeroMock} alt="dashboard preview" className="w-full h-44 sm:h-56 md:h-64 object-cover" />
+          <div className="bg-gradient-to-br from-white/5 to-white/2 rounded-xl p-4 hero-card shadow-neon w-full max-w-lg">
+            <div className="rounded-lg overflow-hidden border border-white/5">
+              <img src={HeroMock} alt="dashboard preview" className="w-full h-60 sm:h-72 md:h-80 object-cover" />
             </div>
+            <div className="mt-3 text-sm text-gray-300">Featured: Aurora Wireless Gaming Headset — immersive 7.1 surround sound.</div>
           </div>
         </div>
       </div>

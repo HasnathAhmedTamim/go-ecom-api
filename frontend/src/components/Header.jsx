@@ -15,27 +15,27 @@ export default function Header() {
   const isAdmin = storeUser?.role === 'admin'
 
   return (
-    <header className="bg-white shadow">
+    <header className="bg-black border-b border-white/5">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-md flex items-center justify-center text-white font-bold">MS</div>
+          <div className="w-10 h-10 bg-gradient-to-br from-neon-pink to-neon-cyan rounded-md flex items-center justify-center text-black font-bold">GH</div>
           <div>
-            <div className="text-lg font-semibold">MicroSaaS</div>
-            <div className="text-xs text-gray-500">Dashboard demo</div>
+            <div className="text-lg font-semibold text-white">GameHub</div>
+            <div className="text-xs text-gray-400">Pro gaming storefront</div>
           </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/products" className="text-gray-700 hover:text-gray-900">Products</Link>
-          <Link to="/cart" className="text-gray-700 hover:text-gray-900">Cart ({cartCount})</Link>
-          <Link to="/orders" className="text-gray-700 hover:text-gray-900">Orders</Link>
-          {isAdmin && <Link to="/admin" className="text-indigo-600 font-medium">Admin</Link>}
+          <Link to="/products" className="text-gray-300 hover:text-white">Products</Link>
+          <Link to="/cart" className="text-gray-300 hover:text-white">Cart ({cartCount})</Link>
+          <Link to="/orders" className="text-gray-300 hover:text-white">Orders</Link>
+          {isAdmin && <Link to="/admin" className="text-neon-cyan font-medium">Admin</Link>}
 
           {storeUser ? (
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm text-gray-700">{initial}</div>
-                <div className="text-sm text-gray-700">{displayNameCap}</div>
+                <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-sm text-white">{initial}</div>
+                <div className="text-sm text-white">{displayNameCap}</div>
               </div>
               <button
                 onClick={() => {
@@ -44,7 +44,7 @@ export default function Header() {
                     useToastStore.getState().push({ type: 'success', title: 'Signed out' })
                   }
                 }}
-                className="text-sm text-red-600"
+                className="text-sm text-neon-pink"
                 aria-label="Sign out"
               >
                 Logout
@@ -52,15 +52,15 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex items-center gap-4">
-              <Link to="/login" className="text-gray-700 hover:text-gray-900">Login</Link>
-              <Link to="/register" className="text-white bg-blue-600 px-3 py-1 rounded-md">Sign up</Link>
+              <Link to="/login" className="text-gray-300 hover:text-white">Login</Link>
+              <Link to="/register" className="text-black bg-neon-pink px-3 py-1 rounded-md">Sign up</Link>
             </div>
           )}
         </nav>
 
         {/* Mobile menu placeholder */}
         <div className="md:hidden">
-          <Link to="/cart" className="text-gray-700">Cart ({cartCount})</Link>
+          <Link to="/cart" className="text-gray-300">Cart ({cartCount})</Link>
         </div>
       </div>
     </header>

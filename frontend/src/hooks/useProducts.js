@@ -1,13 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
 import api from '../api'
 
-export function useProducts() {
+export function useProducts(filters = {}) {
   return useQuery({
-    queryKey: ['products'],
+    queryKey: ['products', filters],
     queryFn: async () => {
-      const { data } = await api.get('/api/products')
-      // backend returns { items, page, limit, total }
-      // return items array for components expecting an array
+      const params = new URLSearchParams()
+      if (filters.q) params.set('q', filters.q)
+      if (filters.minPrice) params.set('min_price', filters.minPrice)
+      if (filters.maxPrice) params.set('max_price', filters.maxPrice)
+      if (filters.category) params.set('category', filters.category)
+      const url = '/api/products' + (params.toString() ? `?${params.toString()}` : '')
+      const { data } = await api.get(url)
       return data?.items ?? data
     },
   })
