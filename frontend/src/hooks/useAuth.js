@@ -9,7 +9,7 @@ function parseJwt(token) {
     const payload = parts[1]
     const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
     return JSON.parse(decodeURIComponent(escape(json)))
-  } catch (e) {
+  } catch {
     return null
   }
 }
@@ -44,7 +44,7 @@ export function useAuth() {
             const minimal = { id: claims.user_id || claims.sub || null, role: claims.role || null }
             setAuth(minimal, token)
           }
-        } catch (e) {
+        } catch {
           const claims = parseJwt(token)
           if (claims) {
             const minimal = { id: claims.user_id || claims.sub || null, role: claims.role || null }
@@ -56,14 +56,14 @@ export function useAuth() {
     return () => {
       mounted = false
     }
-  }, [token])
+  }, [token, setAuth, user])
 
   function logout() {
     clearAuth()
     // clear react-query cache
     try {
       qc.clear()
-    } catch (e) {
+    } catch {
       /* ignore */
     }
   }

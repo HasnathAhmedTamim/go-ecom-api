@@ -41,7 +41,7 @@ export function devApiMock() {
               if (!user) return json(res, { error: 'Invalid credentials' }, 401)
               const token = user.isAdmin ? 'admin-token' : 'user-token-' + user.id
               return json(res, { user: { id: user.id, name: user.name, email: user.email, isAdmin: user.isAdmin }, token })
-            } catch (e) {
+            } catch {
               return json(res, { error: 'Bad request' }, 400)
             }
           }
@@ -54,7 +54,7 @@ export function devApiMock() {
               const newUser = { id, name: payload.name, email: payload.email, password: payload.password, isAdmin: false }
               users.push(newUser)
               return json(res, { id: newUser.id, name: newUser.name, email: newUser.email })
-            } catch (e) {
+            } catch {
               return json(res, { error: 'Bad request' }, 400)
             }
           }
@@ -82,7 +82,7 @@ export function devApiMock() {
               const order = { id, user_id: userId, products: payload.products || {}, status: 'created' }
               orders.push(order)
               return json(res, order, 201)
-            } catch (e) {
+            } catch {
               return json(res, { error: 'Bad request' }, 400)
             }
           }
@@ -105,7 +105,7 @@ export function devApiMock() {
                 const p = { id, ...payload }
                 products.push(p)
                 return json(res, p, 201)
-              } catch (e) {
+              } catch {
                 return json(res, { error: 'Bad request' }, 400)
               }
             }

@@ -22,7 +22,7 @@ export default function Checkout() {
       clear()
       useToastStore.getState().push({ type: 'success', title: 'Order placed' })
       navigate(`/order/${created.id}`)
-    } catch (err) {
+    } catch {
       useToastStore.getState().push({ type: 'error', title: 'Order failed' })
     }
   }

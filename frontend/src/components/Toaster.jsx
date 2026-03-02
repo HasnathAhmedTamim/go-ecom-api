@@ -6,7 +6,7 @@ function Toast({ t }) {
   useEffect(() => {
     const tm = setTimeout(() => remove(t.id), t.duration || 4000)
     return () => clearTimeout(tm)
-  }, [t.id])
+  }, [t.id, t.duration, remove])
 
   const bg = t.type === 'error' ? 'bg-red-600' : t.type === 'success' ? 'bg-green-600' : 'bg-gray-800'
 

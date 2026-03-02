@@ -10,7 +10,7 @@ api.interceptors.request.use((cfg) => {
   try {
     const token = localStorage.getItem('auth_token')
     if (token) cfg.headers = { ...(cfg.headers || {}), Authorization: `Bearer ${token}` }
-  } catch (e) {
+  } catch {
     // ignore
   }
   return cfg

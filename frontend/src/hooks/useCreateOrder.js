@@ -3,7 +3,7 @@ import api from '../api'
 
 export function useCreateOrder() {
   return useMutation({
-    mutationFn: async ({ items, address }) => {
+    mutationFn: async ({ items }) => {
       // Map items array to products map { id: qty }
       const products = {}
       for (const it of items) {

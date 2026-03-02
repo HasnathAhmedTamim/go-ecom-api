@@ -17,3 +17,5 @@ export const useAuthStore = create((set) => ({
     set({ user: null, token: null })
   },
 }))
+
+export default useAuthStore

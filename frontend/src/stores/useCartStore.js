@@ -12,3 +12,5 @@ export const useCartStore = create((set) => ({
     set({ items: [] })
   },
 }))
+
+export default useCartStore
