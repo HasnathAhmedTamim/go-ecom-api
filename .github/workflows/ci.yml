@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build backend
+        run: |
+          cd backend
+          go mod tidy
+          go build -o server cmd/server/main.go
+
+      - name: Start backend
+        run: |
+          cd backend
+          export JWT_SECRET=ci-secret
+          ./server > server.log 2>&1 &
+          echo $! > server.pid
+          for i in $(seq 1 30); do
+            if curl -sSf http://127.0.0.1:8080/api/ >/dev/null 2>&1; then
+              echo "server up"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install frontend deps
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Lint frontend
+        run: |
+          cd frontend
+          npm run lint || true
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Run smoke tests
+        run: |
+          cd backend
+          API_BASE=http://127.0.0.1:8080 go run ../tools/smoke.go
+
+      - name: Stop backend
+        if: always()
+        run: |
+          if [ -f backend/server.pid ]; then kill "$(cat backend/server.pid)" || true; fi
