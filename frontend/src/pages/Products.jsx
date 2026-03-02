@@ -32,7 +32,10 @@ export default function Products() {
         {data?.map((p) => (
           <div key={p.id} className="bg-black/60 rounded-lg shadow-neon p-4 flex flex-col border border-white/5">
             <div className="h-44 bg-gradient-to-br from-white/3 to-white/2 rounded mb-4 flex items-center justify-center text-gray-400">
-              <img src={p.image || '/screenshots/hero-1.svg'} alt={p.name} className="h-36 object-contain" />
+              {(() => {
+                const imgSrc = p.image ? p.image.replace('.jpg', '.svg') : '/screenshots/placeholder.svg'
+                return <img src={imgSrc} alt={p.name} className="h-36 object-contain" />
+              })()}
             </div>
             <h2 className="font-medium text-lg text-white">{p.name}</h2>
             <p className="text-sm text-gray-300 flex-1 mt-2 line-clamp-3">{p.description || 'High-quality gaming gear and accessories.'}</p>
